@@ -3,16 +3,60 @@
 """
 Usage:
 
-  filter <infile> <colname>=val
+  filter <infile> <colname>=val .. <colname>/=val ..
   
 Filter selected rows from the obscore psv file, creating a new obscore.psv
 file on stdout. Very limited functionality at present.
+
+  <colname>=val
+
+means only keep columns that equal val and
+
+  <colname>/=val
+
+means exclude columns that equal val.
+
+Note that only direct equality is supported, no regular expression matching.
 
 """
 
 import sys
 import psv
 
+class ColumnFilter:
+    """Simple filter for column data."""
+
+    def __init__(self, colname, value):
+        self.colname = colname
+        self.value = value
+
+    def filter(self, colvals):
+        """Returns True if the column matches the
+        filter (i.e. we keep the row).
+
+        colvals is a dictionary
+        where key = column name, value = column value.
+
+        A KeyError is thrown if the column is not
+        contained in the column.
+        """
+
+        raise NotImplementedError("filter() must be defined by the subclass")
+
+class IncludeFilter(ColumnFilter):
+    """Only allow a column to pass if it
+    matches the value."""
+
+    def filter(self, colvals):
+        return colvals[self.colname] == self.value
+        
+class ExcludeFilter(ColumnFilter):
+    """Only allow a column to pass if it
+    does not match the value."""
+
+    def filter(self, colvals):
+        return colvals[self.colname] != self.value
+        
 def doit(fname, filters):
 
     (rdr, fh) = psv.get_reader(fname)
@@ -23,8 +67,8 @@ def doit(fname, filters):
     for row in rdr:
         rvals = psv.row2dict(row)
         flag = True
-        for (cname, cval) in filters:
-            flag &= (rvals[cname] == cval)
+        for f in filters:
+            flag &= f.filter(rvals)
 
         if flag:
             wtr.writerow(row)
@@ -32,21 +76,32 @@ def doit(fname, filters):
     fh.close()
 
 def splitfilter(txt):
-    "Convert 'foo=bar' into ('foo', 'bar')"
+    """Convert 'foo=bar' or 'foo/=bar' into a filter object."""
+
     n = txt.find("=")
     if n == -1:
         raise ValueError("No = in filter '{0}'!".format(txt))
 
-    elif n == 0:
+    colname = txt[:n]
+    colval  = txt[n+1:]
+
+    if colname.endswith("/"):
+        ftype = ExcludeFilter
+        colname = colname[:-1]
+
+    else:
+        ftype = IncludeFilter
+
+    if colname == "":
         raise ValueError("No column name in filter '{0}'!".format(txt))
 
     else:
-        return (txt[:n], txt[n+1:])
+        return ftype(colname, colval)
 
 if __name__=="__main__":
     nargs = len(sys.argv)
     if len(sys.argv) < 3 :
-        print "Usage: " + sys.argv[0] + " <filename> <colname1=val1> [.. <colnameN=valN>]"
+        print "Usage: " + sys.argv[0] + " <filename> <colname1=val1> [.. <colnameN/=valN>]"
         sys.exit(-1)
 
     fname = sys.argv[1]
