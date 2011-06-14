@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+"""
+Select given columns from the obscore psv file,
+where we currently use integer numbers for the columns.
+
+Column numbers start at 1!
+"""
+
+import sys
+import psv
+
+def select(fname, colnums):
+
+    (rdr, fh) = psv.get_reader(fname)
+    for row in rdr:
+        out = [row[cn-1] for cn in colnums]
+        print "  ".join(out)
+
+    fh.close()
+
+if __name__=="__main__":
+    nargs = len(sys.argv)
+    if len(sys.argv) < 3 :
+        print "Usage: " + sys.argv[0] + " <filename> <colnum1> [.. <colnumN>]"
+        sys.exit(-1)
+
+    fname = sys.argv[1]
+    try:
+        colnums = map(int, sys.argv[2:])
+
+    except ValueError:
+        raise ValueError("Unable to convert one of the column numbers")
+
+    chk = [cn for cn in colnums if cn < 1]
+    if chk != []:
+        raise ValueError("Column numbers must be > 0!")
+
+    select(fname, colnums)

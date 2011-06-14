@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+
+"""
+Check that em_min/max values match the em_domain field.
+"""
+
+import sys
+import psv
+
+# min/max wavelengths in metres, if applicable
+_emdomains = {
+    'RADIO': (0.01, None),
+    'MILLIMETER': (0.1e-3, 0.01),
+    'INFRARED': (1e-6, 100e-6),
+    'OPTICAL': (0.3e-6, 1e-6),
+    'UV': (100e-9, 300e-9),
+    'EUV': (100e-10, 1000e-10),
+    'X-RAY': (0.1e-10, 100e-10),
+    'GAMMA-RAY': (None, 0.1e-10),
+    }
+
+for (a,bs) in [
+    ('EUV', ['EXTREME-UV']),
+    ('UV', ['NEAR-UV', 'FAR-UV'])
+    ]:
+    for b in bs:
+        _emdomains[b] = _emdomains[a]
+
+def check(fname):
+
+    _domains = {}
+
+    (rdr, fh) = psv.get_reader(fname)
+    rnum = 0
+    for row in rdr:
+        rnum += 1
+        edmn = psv.get_column(row, "em_domain")
+        emin = psv.get_column(row, "em_min")
+        emax = psv.get_column(row, "em_max")
+        if edmn == '':
+            print("Row # {0} empty em_domain field: e_min={1} e_max={2}".format(rnum, emin, emax))
+
+        else:
+            emin = float(emin)
+            emax = float(emax)
+
+            if emax <= emin:
+                print("Row # {0} has emax <= emin ({1}, {2})".format(rnum, emax, emin))
+                next
+
+            for dm in edmn.split(','):
+                try:
+                    (bmin,bmax) = _emdomains[dm.upper()]
+                    emsg = []
+                    if bmin != None:
+                        if emin < bmin:
+                            emsg.append("emin < band minimum ({0} vs {1})".format(emin, bmin))
+
+                        if emax <= bmin:
+                            emsg.append("emax <= band minimum ({0} vs {1})".format(emax, bmin))
+                        
+                    if bmax != None:
+                        if emin >= bmax:
+                            emsg.append("emin >= band maximum ({0} vs {1})".format(emin, bmax))
+
+                        if emax > bmax:
+                            emsg.append("emax > band maximum ({0} vs {1})".format(emax, bmax))
+                        
+                    if len(emsg) != 0:
+                        print "Row # {0} - {1} - {2}".format(rnum, edmn, " ".join(emsg))
+                        
+                except KeyError:
+                    try:
+                        _domains[dm] += 1
+
+                    except KeyError:
+                        print("Row # {0} unknown EM domain '{1}'".format(rnum, dm))
+                        _domains[dm] = 1
+
+    fh.close()
+
+    if len(_domains) != 0:
+        print("\nThe following unknown EM_DOMAIN values were used:")
+        for (k,v) in _domains.iteritems():
+            print("  {0}  ({1} times)".format(k,v))
+
+        print("")
+
+if __name__=="__main__":
+    nargs = len(sys.argv)
+    if len(sys.argv) != 2 :
+        print "Usage: " + sys.argv[0] + " <filename>"
+        sys.exit(-1)
+
+    check(sys.argv[1])

@@ -1,0 +1,9 @@
+
+Code for analysis and extraction of data from MAST obscore files.
+
+Input data is assumed to be in pipe-separated format - e.g. obscore.psv.
+
+The idea is to extract out mission-specific entries from the table for
+later ingestion. We also provide routines for filtering and selection
+to enable simple analysis and data checks.
+

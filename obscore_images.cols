@@ -1,0 +1,126 @@
+1 Dataset name or preview name
+2 data url - but does not seem to exist for at least the first row
+3 size?
+4 mid-point of observation?
+5 ra in degrees
+6 dec in degrees
+7 number of dimensions
+8 pixels
+9 ? some form of WCS info?
+10 ? some form of WCS info?
+11 coord sys
+12 epoch
+13 projection
+14 crpix?
+15 crval?
+16 axis names
+17 filter name
+18 ? 0 in this case
+19 units ?
+20 some form of project name
+21 ? flag of some kind
+22 ? flag of some kind
+23 target name
+24 ? 2 in this case, also have empty and 3
+25 ? 33 in this case; this could be some sort of id/link counter thingie
+26 type (image)
+27 number?
+28 STC shape/FOV
+29 obs start time
+30 obs end time
+31 texp
+32 40 ? 119.25 in this case
+
+
+1 X0KE0102T
+2 http://archive.stsci.edu/browse/previews/hst/fits//X0KE0102T.fits.gz
+3 32768
+4 48430.016226899999
+5
+6 
+7 2
+8 128 128
+9 
+10 
+11 FK5
+12 2000
+13 TAN
+14 
+15 
+16 
+17 
+18 0
+19 meters
+20
+21 y
+22 n
+23 NGC4486
+24 2
+25 33
+26 image
+27 
+28 
+29 48430.014513900001
+30 48430.017939799996
+31 119.25
+32 0
+33 0
+34 8.9805825242718438
+35 ivo://hst.mast/X0KE0102T
+36 HST/FOC
+37 
+38 fits.image
+39 
+40 119.25
+
+1 X0KE0104T
+2 http://archive.stsci.edu/browse/previews/hst/fits//X0KE0104T.fits.gz
+3 32768
+4 48430.144571800003
+5 
+6
+7 2
+8 128 128
+9 
+10 
+11 FK5
+12 2000
+13 TAN
+14 
+15 
+16 
+17
+18 0
+19 meters
+20
+21 y
+22 n
+23 NGC4486
+24 2
+25 33
+26 image
+27
+28
+29 48430.142858799998
+30 48430.1462847
+31 295.875
+32 0
+33 0
+34 8.9805825242718438
+35 ivo://hst.mast/X0KE0104T
+36 HST/FOC
+37
+38 fits.image
+39
+40 295.875
+
+
+X0KE0104T|http://archive.stsci.edu/browse/previews/hst/fits//X0KE0104T.fits.gz|32768|48430.144571800003|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|NGC4486|2|33|image|||48430.142858799998|48430.1462847|295.875|0|0|8.9805825242718438|ivo://hst.mast/X0KE0104T|HST/FOC||fits.image||295.875
+X0KE0107T|http://archive.stsci.edu/browse/previews/hst/fits//X0KE0107T.fits.gz|32768|48430.357604199999|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|NGC4486|2|33|image|||48430.355891200001|48430.359317100003|295.875|0|0|8.064516129032258|ivo://hst.mast/X0KE0107T|HST/FOC||fits.image||295.875
+X0KE0109T|http://archive.stsci.edu/browse/previews/hst/fits//X0KE0109T.fits.gz|32768|48430.433159699998|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|NGC4486|2|33|image|||48430.431446800001|48430.434872700003|118.25|0|0|8.064516129032258|ivo://hst.mast/X0KE0109T|HST/FOC||fits.image||118.25
+X0RL0102T|http://archive.stsci.edu/browse/previews/hst/fits//X0RL0102T.fits.gz|32768|48573.654838000002|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|BPM16274|2|33|image|||48573.653124999997|48573.656550899999|295.875|0|0|8.9805825242718438|ivo://hst.mast/X0RL0102T|HST/FOC||fits.image||295.875
+X0RL0104T|http://archive.stsci.edu/browse/previews/hst/fits//X0RL0104T.fits.gz|32768|48573.7069213|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|BPM16274|2|33|image|||48573.706099499999|48573.7077431|142.375|0|0|8.9805825242718438|ivo://hst.mast/X0RL0104T|HST/FOC||fits.image||142.375
+X0RL0202T|http://archive.stsci.edu/browse/previews/hst/fits//X0RL0202T.fits.gz|32768|48574.448842600003|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|BPM16274|2|33|image|||48574.447129599997|48574.4505556|295.875|0|0|8.9805825242718438|ivo://hst.mast/X0RL0202T|HST/FOC||fits.image||295.875
+X0RL0204T|http://archive.stsci.edu/browse/previews/hst/fits//X0RL0204T.fits.gz|32768|48574.462106500003|||2|128 128| | |FK5|2000|TAN| | | ||0|meters||y|n|BPM16274|2|33|image|||48574.460393499998|48574.4638194|295.875|0|0|8.9805825242718438|ivo://hst.mast/X0RL0204T|HST/FOC||fits.image||295.875
+X09S0307R|http://archive.stsci.edu/browse/previews/hst/fits//X09S0307R.fits.gz|524288|48169.053749999999|||2|512 512| | |FK5|2000|TAN| | | ||0|meters||y|n|NGC104|2|525|image|||48169.050300900002|48169.057199100003|596.625|0|0|4.4943820224719104|ivo://hst.mast/X09S0307R|HST/FOC||fits.image||596.625
+X09S0308R|http://archive.stsci.edu/browse/previews/hst/fits//X09S0308R.fits.gz|524288|48169.063437500001|||2|512 512| | |FK5|2000|TAN| | | ||0|meters||y|n|NGC104|2|525|image|||48169.059988399997|48169.066886599998|596.625|0|0|4.4943820224719104|ivo://hst.mast/X09S0308R|HST/FOC||fits.image||596.625

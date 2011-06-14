@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+
+"""
+Calculate the EM_DOMAIN given the em_min/max values,
+reporting differences to the input values.
+"""
+
+import sys
+import psv
+
+# min/max wavelengths in metres, if applicable
+_emdomains = [
+    ('RADIO', 0.01, None),
+    ('MILLIMETER', 0.1e-3, 0.01),
+    ('INFRARED', 1e-6, 100e-6),
+    ('OPTICAL', 0.3e-6, 1e-6),
+    ('UV', 100e-9, 300e-9),
+    ('EUV', 100e-10, 1000e-10),
+    ('X-RAY', 0.1e-10, 100e-10),
+    ('GAMMA-RAY', None, 0.1e-10)
+     ]
+
+#for (a,bs) in [
+#    ('EUV', ['EXTREME-UV']),
+#    ('UV', ['NEAR-UV', 'FAR-UV'])
+#    ]:
+#    for b in bs:
+#        _emdomains[b] = _emdomains[a]
+
+def find_domains(emin, emax):
+    """Given emin/max fields in metres (as floats),
+    return the wavelength-sorted EM_DOMAIN values,
+    as an array."""
+
+    if emin >= emax:
+        raise ValueError("emin >= emax!")
+    
+    out = []
+
+    for (lbl, lmin, lmax) in _emdomains:
+        if lmin == None or emax > lmin:
+            out.append(lbl)
+
+        if lmin == None or emin >= lmin:
+            break
+
+    if out == []:
+        raise ValueError("Unable to match up emin={0} emax={1}".format(emin, emax))
+                         
+    return out[::-1]
+
+def check(fname):
+
+    _domains = {}
+
+    (rdr, fh) = psv.get_reader(fname)
+    rnum = 0
+    for row in rdr:
+        rnum += 1
+        edmn = psv.get_column(row, "em_domain").upper()
+        emin = psv.get_column(row, "em_min")
+        emax = psv.get_column(row, "em_max")
+        if edmn == '':
+            print("Row # {0} empty em_domain field: e_min={1} e_max={2}".format(rnum, emin, emax))
+            next
+
+        emin = float(emin)
+        emax = float(emax)
+        dmns = find_domains(emin, emax)
+        dstr = ",".join(dmns)
+        if dstr != edmn:
+            print("Row # {0} em_domain={1} calculated={2}".format(rnum, edmn, dstr))
+
+            try:
+                _domains[edmn]
+
+            except KeyError:
+                _domains[edmn] = {}
+
+            try:
+                _domains[edmn][dstr] += 1
+
+            except KeyError:
+                _domains[edmn][dstr] = 1
+
+    fh.close()
+
+    if len(_domains) != 0:
+        print("\nThe following re-mappings are needed:")
+        for (k,v) in _domains.iteritems():
+            print(" Input domain: {0}".format(k))
+            for (n,c) in v.iteritems():
+                print("  -> {0}  ({1} times)".format(n,c))
+
+            print("")
+
+if __name__=="__main__":
+    nargs = len(sys.argv)
+    if len(sys.argv) != 2 :
+        print "Usage: " + sys.argv[0] + " <filename>"
+        sys.exit(-1)
+
+    check(sys.argv[1])
