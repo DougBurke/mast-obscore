@@ -2,6 +2,7 @@
 Routines for dealing with MAST data in PSV format.
 """
 
+import sys
 import csv
 
 # A dialect for pipe-separated values
@@ -143,7 +144,11 @@ def get_reader(fname):
 
     """
 
-    fh = open(fname, "r")
+    if fname == "-":
+        fh = sys.stdin
+    else:
+        fh = open(fname, "r")
+        
     rdr = csv.reader(fh, dialect="psv")
     return (rdr, fh)
 
